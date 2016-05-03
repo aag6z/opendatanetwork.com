@@ -1233,7 +1233,7 @@ const SOURCES = [
                 callback: (regions) => {
 
                     /**
-                    * NBE fxf US Gazetteer
+                    * NBE  fxf US Gazetteer
                     */
                     const baseURL = 'https://odn.data.socrata.com/resource/gm3u-gw57.json';
                     const params = {
