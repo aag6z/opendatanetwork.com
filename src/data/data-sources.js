@@ -13,6 +13,7 @@ if (typeof require !== 'undefined') {
  */
 
 const ODN_DOMAIN = 'odn.data.socrata.com';
+const HLT_DOMAIN = 'owh.demo.socrata.com';
 
 const ATTRIBUTIONS = {
     acs: {
@@ -87,6 +88,105 @@ function _order(column, orders) {
 
 const SOURCES = [
     {
+        name: 'Causes Of Death',
+        datasets: [
+            {
+                vector: 'deathcauses',
+                name: 'Causes of Death',
+                sourceURL: 'https://owh.demo.socrata.com/Mortality/Multiple-Cause-Of-Death-1999-2014/r4bh-2y59/data',
+                description: `
+                    insert a description when readyyyy`,
+                attribution: [ATTRIBUTIONS.rwjf],
+                domain: HLT_DOMAIN,
+                fxf: 'ptzw-575y',
+                regions: 'nation',
+                searchTerms: ['health', 'mortality'],
+                charts: [
+                    {
+                        name: 'Cause of Death: Heart Disease',
+                        params: {underlying_cause_of_death: 'Atherosclerotic heart disease'},
+                        description: `
+                            Insert description`,
+                        data: [
+                            {
+                                column: 'year',
+                                label: 'Year',
+                                type: 'string'
+                            },
+                            {
+                                column: 'deaths',
+                                label: 'Deaths',
+                                format: { pattern: '###,###' }
+                            }
+                        ],
+                        chart: 'line',
+                        forecast: {
+                            type: 'linear',
+                            steps: 5
+                        },
+                        options: {
+                            height: 300
+                        }
+                    },
+                    {
+                        name: 'Cause of Death: Lung Disease',
+                        params: {underlying_cause_of_death: 'Bronchus or lung, unspecified - Malignant neoplasms'},
+                        description: `
+                            Insert description`,
+                        data: [
+                            {
+                                column: 'year',
+                                label: 'Year',
+                                type: 'string'
+                            },
+                            {
+                                column: 'deaths',
+                                label: 'Deaths',
+                                format: { pattern: '###,###' }
+                            }
+                        ],
+                        chart: 'line',
+                        forecast: {
+                            type: 'linear',
+                            steps: 5
+                        },
+                        options: {
+                            height: 300
+                        }
+                    },
+                    {
+                        name: 'Cause of Death: Unspecified Dementia',
+                        params: {underlying_cause_of_death: 'Unspecified dementia'},
+                        description: `
+                            Insert description`,
+                        data: [
+                            {
+                                column: 'year',
+                                label: 'Year',
+                                type: 'string'
+                            },
+                            {
+                                column: 'deaths',
+                                label: 'Deaths',
+                                format: { pattern: '###,###' }
+                            }
+                        ],
+                        chart: 'line',
+                        forecast: {
+                            type: 'linear',
+                            steps: 5
+                        },
+                        options: {
+                            height: 300
+                        }
+                    }
+
+
+                ]
+            }
+        ]
+    },
+    {
         name: 'Demographics',
         datasets: [
             {
@@ -114,6 +214,11 @@ const SOURCES = [
                                 format: { pattern: '###,###' }
                             }
                         ],
+                         transform: rows => {
+                            return rows
+                                .filter(row => row.year !== '2009')
+                                .map(row => _.extend(row, { population_percent_change: parseFloat(row.population_percent_change) / 100 }));
+                        },
                         chart: 'line',
                         forecast: {
                             type: 'linear',

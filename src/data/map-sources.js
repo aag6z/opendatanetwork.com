@@ -6,6 +6,7 @@ if (typeof require !== 'undefined') {
 }
 
 const DOMAIN = 'odn.data.socrata.com';
+const HLT_DOMAIN = 'owh.demo.socrata.com';
 
 function _getParams(component) {
     return { component };
@@ -624,6 +625,22 @@ const MAP_SOURCES = {
                 format: format.percent,
                 stoplight: true,
                 reverse: true
+            };
+        })
+    },
+    deathcauses: {
+        name: 'deathcauses',
+        domain: HLT_DOMAIN,
+        fxf: 'ptzw-575y',
+        questions: true,
+        variables: ['Underlying Cause of Death, Deaths'].map((name, index) => {
+            return {
+                name: `${name} Rate`,
+                column: `${name.toLowerCase().replace(/\s/g, '_')}_value`,
+                metric: nameToURL(`${name} Rate`),
+                years: _.range(1999, 2014),
+                format: format.ratio,
+                stoplight: true,
             };
         })
     },
